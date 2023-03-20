@@ -1,10 +1,13 @@
-console.log("hello world")
-
-const sleep = (s: number) => new Promise(resolve => setTimeout(resolve, s * 1000))
+//大事！！！！！！！！！！
 //await => awaitを指定したPromiseな関数がresolveや、rejectを返すまで処理を待つ。
 //もし、awaitを指定した関数がPromiseでなければ関数がPromise.resolbeされたときと同じ挙動になる。
 
+console.log("hello world")
+
+const sleep = (s: number) => new Promise(resolve => setTimeout(resolve, s * 1000))
+
 const heavyRequest = async (idx: number) => {
+    //2から6秒のランダムなリクエストのようなダミー関数
     const num = Math.floor(Math.random() * 5 + 2)
     await sleep(num)
     console.log(`${idx}: fin ${num}s single request`)
@@ -12,6 +15,7 @@ const heavyRequest = async (idx: number) => {
 }
 
 const BadRequestExample = async () => {
+    //それぞれの関数がresolveされるまで待つようになっているので、a, b, cが逐次実行される。
     const a = await heavyRequest(0)
     const b = await heavyRequest(1)
     const c = await heavyRequest(2)
@@ -22,6 +26,7 @@ const BadRequestExample = async () => {
 
 
 const GoodRequestExample = async () => {
+    //3つの関数を一気に実行。awaitを用いているので、全ての関数(Promise)がresolveされたら次の行のコンソールを実行し、終了する。
     const d = await Promise.all([heavyRequest(0), heavyRequest(1), heavyRequest(2)])
     console.log(`Promise.allの処理が終わったので、returnをしてGoodRequestExampleをresolveしようと思います`)
     return (`Good Request Example is resolved: \nfin Time: \n${d} `)

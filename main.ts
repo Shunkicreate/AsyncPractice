@@ -22,12 +22,22 @@ const BadRequestExample = async () => {
     return (`fin Bad Request Example: ${a} ${b} ${c} `)
 }
 
-// BadRequestExample().then((res) => { console.log(res) })
+BadRequestExample().then((res) => { console.log(res) })
 
 
 const GoodRequestExample = async () => {
     //3つの関数を一気に実行。awaitを用いているので、全ての関数(Promise)がresolveされたら次の行のコンソールを実行し、終了する。
+    //ちなみにdにはresolveされたそれぞれの関数の結果が入る
     const d = await Promise.all([heavyRequest(0), heavyRequest(1), heavyRequest(2)])
+
+    //同様のことを下のようにも書くことが出来ます。
+    // const d: Array<String> = []
+    // await Promise.all([heavyRequest(0), heavyRequest(1), heavyRequest(2)]).then((res) => {
+    //     res.forEach(element => {
+    //         d.push(element)
+    //     });
+    // })
+
     console.log(`Promise.allの処理が終わったので、returnをしてGoodRequestExampleをresolveしようと思います`)
     return (`Good Request Example is resolved: \nfin Time: \n${d} `)
 }
